@@ -1,1 +1,6 @@
-anyio==4.2.0
+packaging==23.2
+pluggy==1.4.0
+pycparser==2.21
+pytest==8.0.2
+PyYAML==6.0.1
+tomli==2.0.1
