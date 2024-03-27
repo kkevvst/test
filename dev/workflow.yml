@@ -1,0 +1,60 @@
+parameters:
+  system_name: CCRM
+  branch_name: CCRM_VER
+  tag_name: CCRM_VER_1.0.0
+
+jobs:
+  download:
+    - hosts: test1
+      gather_facts: no
+      vars:
+        tt: "2016-08-14 20:00:12"
+      tasks: 
+        - name: download test
+          command: ls
+          register: res  
+        - debug: var=res
+  build:
+    - hosts: test1
+      gather_facts: no
+      vars:
+        tt: "is build"
+      tasks: 
+        - debug:
+            msg: "{{system_name}} {{ tt }}"
+  package:
+    - hosts: test1
+      gather_facts: no
+      vars:
+        tt: "is package"
+        system_name: "loan"
+        ff: "{{ system_name }}_{{ tt }}"
+      tasks: 
+        - name: package test
+          debug:
+            msg: "{{ system_name }} {{ ff }}"
+  deploy:
+    - hosts: test1
+      gather_facts: no
+      vars:
+        tt: "is deploy"
+        system_name: "vbs"
+      tasks: 
+        - name: deploy test 
+          debug:
+            msg: "{{ system_name }} {{ tt }}"
+
+workflows:
+  Example-Workflow:
+    jobs:
+      - download
+      - build:
+          requires:
+            - download
+      - package:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - build
+            - package
